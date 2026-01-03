@@ -24,6 +24,13 @@ function renderTable() {
           </td>
           <td>${team.points}</td>
           <td>
+            <input 
+              type="number" 
+              id="input-${index}" 
+              value="1" 
+              min="1" 
+              style="width:55px; text-align:center;"
+            >
             <button class="add" onclick="changePoints(${index}, 1)">+</button>
             <button class="sub" onclick="changePoints(${index}, -1)">−</button>
           </td>
@@ -32,8 +39,19 @@ function renderTable() {
     });
 }
 
-function changePoints(index, value) {
-  teams[index].points = Math.max(0, teams[index].points + value);
+function changePoints(index, sign) {
+  const input = document.getElementById(`input-${index}`);
+  let value = parseInt(input.value);
+
+  if (isNaN(value) || value <= 0) return;
+
+  teams[index].points += sign * value;
+
+  if (teams[index].points < 0) {
+    teams[index].points = 0;
+  }
+
+  input.value = 1; // reset box after action
   renderTable();
 }
 
